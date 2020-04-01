@@ -30,14 +30,14 @@ export DOMAIN=foo.cse.unsw.edu.au
 openssl req -new -newkey rsa:4096 -nodes \
   -keyout "${DOMAIN}/${DOMAIN}.key" \
   -out "${DOMAIN}/${DOMAIN}".csr \
-  -subj "/CN=${DOMAIN}\/emailAddress=csesoc.dev.head@cse.unsw.edu.au/C=AU/ST=New South Wales/L=Kensington/O=UNSW Computer Science Society" \
+  -subj "/CN=${DOMAIN}/emailAddress=projects@csesoc.org.au/C=AU/ST=New South Wales/L=Kensington/O=UNSW Computer Science Society" \
   -config "${DOMAIN}/openssl.cnf"
 ```
 
 You can inspect the CSR to make sure everything looks OK:
 
 ```bash
-openssl req -in "${DOMAIN}/${DOMAIN}.csr -noout -text
+openssl req -in "${DOMAIN}/${DOMAIN}.csr" -noout -text
 ```
 
 UNSW IT will return signed certificate. Place it in the directory with the name `${DOMAIN}.crt`.
