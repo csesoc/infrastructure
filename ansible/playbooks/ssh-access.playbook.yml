@@ -5,14 +5,11 @@
   tags: security
   vars:
     authorized_keys:
-      # Nick Whyte
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzhFQmx3gz+fSiTgqguRYskIrOzuYteTIRLIom7jFQSRcxIiIozX/FMOyFpc7ASmy9FNvlUzjZEcgOoTjdflUTDWp8N61pjcpO3n8FEGe7Ine7HOpbIC6ghWeDNS4nyg3Tsk3cK2kLTXBdKk+gGU7ZnvT7WzehlLLVNpnnUqmdVmy4OU4yRQ6Fvs+lVVcEkCpIa83oqLX6w/nNxv3mVXrdPYtluCOLJ/dajZht5zFLOY6hJSPuVxwy2oRSzmrSh+Dn0tBr9C5H8QtEUgHm0s4k7gHn6ivAopqyfU0WvPgiIrLPwmXysCzxrOiiXoXAT4p6bJj5W/ei62FejEeBbZTn nickw@pro.home-feb-2016
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/5tFquHcGRtHJWy6aq2bg4ivCU4TLF7QX94FZNScWGL5Xle7GZS5519u+GGFo1IObDovGUTe0nz9hOXHigc+6ABia4QSsd/lzVvp0EnqysiCnhRpzS4miTUmH4v46ubNFiQ/eGXSXG7pAO7ozLBsLpnEdxxf/BBr8MF8wCSI3KKTMKBhy6KlM/klwucsn6042OFlszmhNuSn/JK2ZKl2qAFSTEBo1qBnCVtJjrDU89F0R7BnR8/835K809o52/muKrFAGITZF2rvb7kZmGMH19aN7qP5kHBsnOLcinuL0sdGMHjCfxVQchernMTQ6olvVF0xzXC9vanKcRziYHMB3 nickw@canva
-     # Thomas Kunc
+      # Thomas Kunc (2020 Exec)
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC09/iVY7nD727DpY2viwrdozwfmou8M3sFHARBpXCDPnTUgXX8SDQOANuXk5UsFgfvp+lr0vKb5S4OfkkQxdlkH8yO418t1UwZiYm1d6L2eNXWGzy80rkSsxq8P+DmoGthDax04e0htcIDC7+Y1dOaVaIuv01ZJ3yUnOGPS+Yvte3DluzXlVULCcXwHFe9+zUmcFxicy/EW5I3a1mAyblGz2jhz6G3jbhOgzfOSoFtUZbE6jtZf70EKylA146pg/sgShmK++HijnJcjUQTh0FUKlba2uLu7+eJ38pJNbVtisHT/uDT3nTFJCEYZy4Xt3dvboOp7XAzH1dxX19VqkYx tomkunc0@gmail.com
-      # Gordon Zhong
+      # Gordon Zhong (2020 Technical Director)
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDIC06YB8eMjXpqCcFxCL/yCS87r9kT8FOqXCpACoqhBLRdu1N4qnoq5nqHGoZpLRE7N3hU4vNbk8dzYzA1notbtFAf2QutKf9qUxXS5MTafmMbb1pL4oFqzfr2aUlVGPvWkXBeixHMgfynRU4NftcY/p318mtQcxKMc2deZz6GEb7jFVFnzUBtWyvFmFhEkmfTVsJEQArgpVToPkUrDf8gww3KTXLJVMGDu6DZ+2BZr5HAHwQ4oYJZQym5AbwUq3iT8LUMm1sfLUNmhoMBrcv/Xi9767ijUe2YNQ4ggUbXhfXKRfBDVntjHbkjoAtRNQjWGBru0aAuMtX5YDK1P0PwgY22IQ8olGW7tRKfyCYa1rFFI6e3PDwiIsb15TRpAkRgzH5Ll+3O1E3Po/wcXXpybg9LJ/bN2NkfC6cM+dzwhs0FMMRyEXxDpjid9fBGGBcbCbBMSm5QdOTU4+F91StV6psb4e1lzdVwuvMbG7rMFb3noa/OVsmLqaWBFnXS8/OJVPSd2boQFSg8EmAJXIquZMS5FRjvgPAqEgzl8E4gQ4Gxv+LKc27PnWx8qHLfpNUAjdo1eeYb4Dq8fARSkydY+UE7IBMAqXxdzeoOPV70o5mit6Lg9daQNfVoxWt1jVMKFl06EHAvToE3d3h84wvqMXY6P3uWheBT97Ib2axSmw== gordon.zhong@outlook.com.au
-      # Leesa Dang
+      # Leesa Dang (2020 Technical Director)
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiSB5kujfx5JbU+L2BAD7HStUj6XjubLUoIZV8ecfZioWqm/08n0TtflsSyyIXh4pANbiBYDfV8Vp4UFa+aRlhstmAqeSD0wuDZ+AeXq1T2R4v3eMU09XxD0ouc2jsyvnPuOuyy9P+YTZ9H7I8UvzRE20XEiAN5kJdO+E++vLMBgINU7i+GL7VyMCc5tIX7Tgjlt3pywGymgJrQDSq48DN36/AaLu0FBTpiD4quMd2a7A6/F3TSHnPdN1cFTQlNL1zz+6ROEI1ahGIEtMZTrZTWCT02tPEp2+GToaBOGBkorX7MEUgcAIK4XtRy9bnnUtehvtBzi583nnWgCP7+AvT z5164947@cse.unsw.edu.au
   tasks:
     - name: "Install Keys"

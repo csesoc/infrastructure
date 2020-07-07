@@ -1,0 +1,35 @@
+# You can't upload this file directly - it's easier to recreate it in the UI
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    STAGE: prod
+    cattle.io/creator: norman
+  name: csesoc-website-loadbalancer
+  namespace: sandbox
+spec:
+  rules:
+  - host: csesoc.unsw.edu.au
+    http:
+      paths:
+      - backend:
+          serviceName: ingress-ba00534d2d16035af6f2070db8c86408
+          servicePort: 8080
+  - host: www.csesoc.unsw.edu.au
+    http:
+      paths:
+      - backend:
+          serviceName: ingress-2bd63388ca9bd2ba7e3718772d9ba6a4
+          servicePort: 8080
+  - host: media-admin.csesoc.unsw.edu.au
+    http:
+      paths:
+      - backend:
+          serviceName: ingress-2f56fd600be98eb7826f135ed92660b0
+          servicePort: 80
+  tls:
+  - hosts:
+    - csesoc.unsw.edu.au
+    - www.csesoc.unsw.edu.au
+    - media-admin.csesoc.unsw.edu.au
+    secretName: csesoc-website-tls

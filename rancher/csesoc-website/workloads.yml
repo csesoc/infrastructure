@@ -1,0 +1,149 @@
+---
+    apiVersion: v1
+    items:
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          cattle.io/creator: norman
+          workload.user.cattle.io/workloadselector: deployment-sandbox-csesoc-website
+        name: csesoc-website
+        namespace: sandbox
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 1
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            workload.user.cattle.io/workloadselector: deployment-sandbox-csesoc-website
+        strategy:
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0
+          type: RollingUpdate
+        template:
+          metadata:
+            annotations:
+              cattle.io/timestamp: "2020-03-19T05:14:24Z"
+            creationTimestamp: null
+            labels:
+              workload.user.cattle.io/workloadselector: deployment-sandbox-csesoc-website
+          spec:
+            containers:
+            - env:
+              - name: STAGE
+                value: prod
+              envFrom:
+              - secretRef:
+                  name: csesoc-website-secrets
+                  optional: false
+              image: csesoc/csesoc-website-v2
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 3
+                initialDelaySeconds: 10
+                periodSeconds: 2
+                successThreshold: 1
+                tcpSocket:
+                  port: 8080
+                timeoutSeconds: 2
+              name: csesoc-website
+              readinessProbe:
+                failureThreshold: 3
+                initialDelaySeconds: 10
+                periodSeconds: 2
+                successThreshold: 2
+                tcpSocket:
+                  port: 8080
+                timeoutSeconds: 2
+              resources: {}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities: {}
+                privileged: false
+                readOnlyRootFilesystem: false
+                runAsNonRoot: false
+              stdin: true
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              tty: true
+              volumeMounts:
+              - mountPath: /app/data
+                name: csesoc-website-data
+            dnsConfig: {}
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+            volumes:
+            - hostPath:
+                path: /containers/data/csesoc-website
+                type: DirectoryOrCreate
+              name: csesoc-website-data
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        labels:
+          cattle.io/creator: norman
+          workload.user.cattle.io/workloadselector: deployment-sandbox-media-admin
+        name: media-admin
+        namespace: sandbox
+      spec:
+        progressDeadlineSeconds: 600
+        replicas: 1
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            workload.user.cattle.io/workloadselector: deployment-sandbox-media-admin
+        strategy:
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0
+          type: RollingUpdate
+        template:
+          metadata:
+            labels:
+              workload.user.cattle.io/workloadselector: deployment-sandbox-media-admin
+          spec:
+            containers:
+            - image: filebrowser/filebrowser
+              imagePullPolicy: Always
+              name: media-admin
+              resources: {}
+              securityContext:
+                allowPrivilegeEscalation: false
+                privileged: false
+                readOnlyRootFilesystem: false
+                runAsNonRoot: false
+              stdin: true
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              tty: true
+              volumeMounts:
+              - mountPath: /srv
+                name: media-data
+              - mountPath: /database.db
+                name: media-db
+              - mountPath: /.filebrowser.json
+                name: media-filebrowser-config
+            dnsConfig: {}
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+            volumes:
+            - hostPath:
+                path: /containers/data/csesoc-website/media
+                type: DirectoryOrCreate
+              name: media-data
+            - hostPath:
+                path: /containers/data/csesoc-website-file-browser/database.db
+                type: ""
+              name: media-db
+            - hostPath:
+                path: /containers/data/csesoc-website-file-browser/.filebrowser.json
+                type: ""
+              name: media-filebrowser-config
+    kind: List

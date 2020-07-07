@@ -43,7 +43,7 @@ Data in the `/containers` directory is backed up to the `ssh://csesoc@cse.unsw.e
 
 **Software Updates**
 
-Wheatley is [configured](https://github.com/csesoc/infrastructure/blob/0255c4e0e0f4cf05f399b42e44340886a883ad4d/ansible/playbooks/wheatley-sys.playbook.yml#L68-L79) to automatically install software updates nightly. Wheatley should be checked in on at a regular frequency to ensure critical updates are being applied and that system reboots are occurring to apply critical kernel patches.
+Wheatley is configured to automatically install software updates nightly. Wheatley should be checked in on at a regular frequency to ensure critical updates are being applied and that system reboots are occurring to apply critical kernel patches.
 
 When a new dist version is released, you will need to undertake the `dist-upgrade` process for Ubuntu to upgrade.  
 
@@ -68,7 +68,7 @@ Memberships to the dev team are transient. People may come and go. For this reas
 2. (Optional): Rotate all affected secrets. If the member leaving goes rogue they will still have access to any unchanged secrets. This means they can still access the infrastructure. To resolve this any secrets they have had access to should be rotated.
 3. Re-encrypt all the secret files. (`git secret hide -c`)
 4. Remove the user's ssh public key to the authorised_keys in `ssh-access.playbook.yml` and apply the playbook to all hosts in the inventory (`ansible-playbook playbooks/ssh-access.playbook.yml`). This will remove access via SSH access to all CSESoc owned hosts.
-5. Remove the user's personal account from all associated services (e.g. [rancher](https://wheatley.cse.unsw.edu.au:7654), [csesoc-website](https://www.csesoc.unsw.edu.au), [csesoc-publications](https://publications.csesoc.unsw.edu.au/), [csesoc-website-media-admin](https://www.csesoc.unsw.edu.au/media-admin))
+5. Remove the user's personal account from all associated services (e.g. [rancher](https://wheatley.cse.unsw.edu.au:7654), [csesoc-website](https://www.csesoc.unsw.edu.au) etc.)
 6. Commit and push all of these changes.
 
 # Secrets
@@ -130,44 +130,3 @@ All CSESoc services must be deployed via Rancher. Deploying an application withi
 
 ## Accessing Rancher
 The rancher UI is exposed on port `7654` over `ssl`. Access it at [https://wheatley.cse.unsw.edu.au:7654](https://wheatley.cse.unsw.edu.au:7654)
-
-## Services/Stacks
-
-The following stacks are currently provisioned. The docker/rancher compose files can be found in the [rancher](rancher) directory. These configurations have had secrets removed and would need to be re-added in the event of a re-deployment.
-
-### CSESoc Website
-The CSESoc Website stack is deployed with a collection of containers.
-- `csesoc-website`: The website django application
-- `load-balancer`: Handles URL/host pattern matching.
-- `www-redirect`: Redirects non-www traffic to [www.csesoc.unsw.edu.au](www.csesoc.unsw.edu.au)
-- `media-admin`: Provides a web UI for uploading static assets to the `/static/media` directory. It is accessible via [https://www.csesoc.unsw.edu.au/media-admin](https://www.csesoc.unsw.edu.au/media-admin).
-
-### Bark Server
-Bark server is a simple single container deployment running the bark backend server.
-
-### CSESoc Publications
-
-This stack runs the [CSESoc publications](https://publications.csesoc.unsw.edu.au) wordpress deployment. 
-
-It is comprised of the following containers:
-
-- `mysql`: The backing store for the wordpress instance.
-- `wordpress`: The wordpress PHP application instance.
-
-### Web Load Balancer
-
-`web-load-balancer` is a special stack - It binds to the host's port `80` and port `443` and has the task of reverse proxying traffic into the applications deployed on the hosts.
-
-By default, all traffic on port `80` is redirect to it's `HTTPS` counterpart on port `443`. This is done via the `geldim/https-redirect` container.
-
-## Upgrade a stack automatically on new container image push
-
-TODO (NW) - fill out this section when we have a strategy for automatically upgrading stacks when a new container image is released.
-
-## Pull Schedule
-
-TODO (NW) - fill out this section when we have a strategy for automatically pulling new container versions (i.e. upgrading wordpress)
-
-## Monitoring
-
-TODO (NW) - Fill out this section with details on service monitoring once it is configured/set up.

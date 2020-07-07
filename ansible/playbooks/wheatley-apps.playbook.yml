@@ -1,13 +1,13 @@
 ---
 - name: Add data dir
-  hosts: all
+  hosts: wheatley
   tasks:
     - name: Add data dir
       file:
         path: /containers/data/
         state: directory
 
-- hosts: all
+- hosts: wheatley
   name: Configure container data backups
   tags: backups
   become: root
@@ -18,50 +18,61 @@
         state: directory
     - name: Copy backup job script
       copy:
+        src: backup.sh
+        dest: ~/bin/backup.sh
+        mode: +x
+    - name: Copy backup container job script
+      copy:
         src: backup-container-data.sh
         dest: ~/bin/backup-container-data.sh
         mode: +x
+    - name: Copy backup rancher job script
+      copy:
+        src: backup-rancher-data.sh
+        dest: ~/bin/backup-rancher-data.sh
+        mode: +x
+    - name: Copy restore backup rancher job script
+      copy:
+        src: restore-backup.sh
+        dest: ~/bin/restore-backup.sh
+        mode: +x
+    - name: Copy restore backup rancher job script
+      copy:
+        src: restore-backup.sh
+        dest: ~/bin/restore-backup.sh
+        mode: +x
+    - name: Add healthcheck UUID
+      lineinfile:
+        path: /etc/environment
+        regexp: '^HEALTHCHECK_UUID'
+        insertafter: '^PATH.*'
+        line: 'HEALTHCHECK_UUID={{ cron_healthcheck_uuid_container_data }}'
     - name: Add nightly cron job
       cron:
         name: "backup container data"
-        hour: 0
+        hour: 1
         minute: 0
-        job: ~/bin/backup-container-data.sh && curl -fsS --retry 3 https://hchk.io/{{ cron_healthcheck_uuid_container_data }} > /dev/null
+        job: ~/bin/backup.sh
 
 - name: Setup Rancher UI
   tags: rancher
-  hosts: all
+  hosts: wheatley
   tasks:
-    - name: Copy rancher root certificate
+    - name: Copy rancher certificates
       copy:
-        src: rancher-nginx/ssl/certs/wheatley.cse.unsw.edu.au.bundle.crt
-        dest: /var/lib/rancher/etc/ssl/ca.crt
-    - name: Copy nginx config
-      copy:
-        src: rancher-nginx
-        dest: /containers/conf/
+        src: ssl/certs
+        dest: /var/lib/rancher/etc/ssl/
     - docker_container:
         name: rancher
-        image: rancher/server:stable
+        image: rancher/rancher:stable
         state: started
         pull: yes
         recreate: yes
-        restart_policy: unless-stopped
-        volumes:
-          - /containers/data/rancher:/var/lib/mysql
-          - /var/lib/rancher/etc/ssl/ca.crt:/var/lib/rancher/etc/ssl/ca.crt
-    - name: Add Nginx Container
-      docker_container:
-        name: nginx
-        image: nginx
-        state: started
-        recreate: yes
-        pull: yes
-        restart_policy: always
         published_ports:
           - 7654:7654
-        links:
-          - rancher:rancher
+        restart_policy: unless-stopped
         volumes:
-          - /containers/conf/rancher-nginx/conf.d:/etc/nginx/conf.d
-          - /containers/conf/rancher-nginx/ssl:/etc/nginx/ssl
+          - /var/lib/rancher/etc/ssl/wheatley.cacerts.pem:/etc/rancher/ssl/cacerts.pem
+          - /var/lib/rancher/etc/ssl/wheatley.fullchain.pem:/etc/rancher/ssl/cert.pem
+          - /var/lib/rancher/etc/ssl/wheatley.key:/etc/rancher/ssl/key.pem
+
