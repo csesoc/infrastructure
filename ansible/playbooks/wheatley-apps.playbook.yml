@@ -16,30 +16,10 @@
       file:
         path: ~/bin/
         state: directory
-    - name: Copy backup job script
+    - name: Copy backup scripts
       copy:
-        src: backup.sh
-        dest: ~/bin/backup.sh
-        mode: +x
-    - name: Copy backup container job script
-      copy:
-        src: backup-container-data.sh
-        dest: ~/bin/backup-container-data.sh
-        mode: +x
-    - name: Copy backup rancher job script
-      copy:
-        src: backup-rancher-data.sh
-        dest: ~/bin/backup-rancher-data.sh
-        mode: +x
-    - name: Copy restore backup rancher job script
-      copy:
-        src: restore-backup.sh
-        dest: ~/bin/restore-backup.sh
-        mode: +x
-    - name: Copy restore backup rancher job script
-      copy:
-        src: restore-backup.sh
-        dest: ~/bin/restore-backup.sh
+        src: scripts/
+        dest: ~/bin/
         mode: +x
     - name: Add healthcheck UUID
       lineinfile:
