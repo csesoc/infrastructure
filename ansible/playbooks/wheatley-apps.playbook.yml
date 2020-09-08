@@ -10,7 +10,7 @@
 
 - hosts: wheatley
   name: Configure container data backups
-  tags: backups
+  tags: backups,cron
   become: root
   tasks:
     - name: Add profile bin dir
