@@ -1,6 +1,7 @@
 ---
 - name: Add data dir
   hosts: wheatley
+  tags: ugc
   tasks:
     - name: Add data dir
       file:
@@ -18,9 +19,16 @@
         state: directory
     - name: Copy backup scripts
       copy:
-        src: scripts/
-        dest: ~/bin/
-        mode: +x
+        src: scripts/{{ item }}
+        dest: /root/bin/
+        owner: root
+        group: root
+        mode: "755"
+      with_items:
+        - backup.sh
+        - backup-container-data.sh
+        - backup-rancher-data.sh
+        - restore-backup.sh
     - name: Add healthcheck UUID
       lineinfile:
         path: /etc/environment
@@ -30,26 +38,38 @@
     - name: Add nightly cron job
       cron:
         name: "backup container data"
-        hour: 1
-        minute: 0
+        hour: "1"
+        minute: "0"
         job: ~/bin/backup.sh
 
 - name: Setup Rancher UI
   tags: rancher
   hosts: wheatley
   tasks:
+    - name: Add rancher certificate dir
+      file:
+        path: /var/lib/rancher/etc/ssl/
+        state: directory
+        mode: "400"
     - name: Copy rancher certificates
       copy:
-        src: ssl/certs
+        src: ssl/certs/{{ item }}
         dest: /var/lib/rancher/etc/ssl/
+        owner: root
+        group: root
+        mode: "400"
+      with_items:
+        - wheatley.key
+        - wheatley.cacerts.pem
+        - wheatley.fullchain.pem
     - docker_container:
         name: rancher
         image: rancher/rancher:stable
         state: started
         pull: yes
-        recreate: yes
+        recreate: no
         published_ports:
-          - 7654:7654
+          - 7654:443
         restart_policy: unless-stopped
         volumes:
           - /var/lib/rancher/etc/ssl/wheatley.cacerts.pem:/etc/rancher/ssl/cacerts.pem

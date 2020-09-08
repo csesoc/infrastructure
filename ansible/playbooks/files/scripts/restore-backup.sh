@@ -2,32 +2,27 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-CONTAINER_NAME='rancher'
-DATE=$(date +"%Y-%m-%d-%H.%m.%S")
-VERSION="stable"
-RANCHER_IMAGE="rancher/rancher:$VERSION"
-DATA_CONTAINER="rancher-data-$DATE"
-BACKUP_DIR='/containers/data/rancher2/'
+# Use this to restore the cluster if it has failed terribly
+# You still need to restore /containers/data from the CSE machine if that got corrupted
 
+RANCHER_CONTAINER="rancher"
+RANCHER_BACKUP_DIR="/containers/data/rancher2"
 
-# Stop Rancher container
-docker stop $CONTAINER_NAME
+echo "Stopping container $RANCHER_CONTAINER"
+docker stop $RANCHER_CONTAINER
 
-# Replicate volumes to DATA_CONTAINER
-docker create --volumes-from "$CONTAINER_NAME" --name "$DATA_CONTAINER" "$RANCHER_IMAGE"
-# Tar and gz Rancher data
-docker run  --volumes-from "$DATA_CONTAINER" -v $PWD:/backup:z busybox tar pzcf "/backup/rancher-data-backup-$VERSION-$DATE.tar.gz" /var/lib/rancher
+# Find backup file (the latest)
+BACKUP_ZIP=$(ls -t $RANCHER_BACKUP_DIR | head -n1)
+echo "Restoring $BACKUP_ZIP"
 
-# Move to a backed up directory
-mv "rancher-data-backup-$VERSION-$DATE.tar.gz" $BACKUP_DIR
+# Run backup procedure
+docker run  --volumes-from $RANCHER_CONTAINER -v $RANCHER_BACKUP_DIR:/backup \
+ busybox sh -c "rm /var/lib/rancher/* -rf  && tar pzxvf /backup/$BACKUP_ZIP"
 
-# Clean up data container
-docker stop $DATA_CONTAINER
-docker rm $DATA_CONTAINER
+# Copy kubernetes internal certificates if missing
+echo "Overwriting internal kubernetes certificates"
+rm -rf /etc/kubernetes/.tmp/*
+cp -a /etc/kubernetes/ssl/. /etc/kubernetes/.tmp
 
-# Clean up old backups older than the last 3
-cd $BACKUP_DIR
-find . -maxdepth 1 -type f -printf '%T@\t%p\0' | sort -z -nrk1 | tail -z -n +4 | cut -z -f2- | xargs -0 rm -f --
-
-# Restart Rancher container
-docker start $CONTAINER_NAME
+echo "Restarting container"
+docker start $RANCHER_CONTAINER

@@ -24,6 +24,7 @@ mv "rancher-data-backup-$VERSION-$DATE.tar.gz" $BACKUP_DIR
 # Clean up data container
 docker stop $DATA_CONTAINER
 docker rm $DATA_CONTAINER
+docker rm $(docker ps -aq --filter ancestor=busybox)
 
 # Clean up old backups older than the last 3
 cd $BACKUP_DIR
