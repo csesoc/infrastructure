@@ -104,15 +104,18 @@ ansible-galaxy install -r requirements.yml
 
 ## Playbook Usage
 
+**NOTE: You typically want to run with the flags `--check` and `--diff` BEFORE you apply the playbooks.**
+This shows what changes are potentially made. When ready to apply remove these flags.
+
 ```bash
 # Provision all hosts SSH authorized_keys
-ansible-playbook  playbooks/ssh-access.playbook.yml
+ansible-playbook --check --diff playbooks/ssh-access.playbook.yml
 # Provision CSE account (you should not need to run this unless setting up an entirely new environment)
-ansible-playbook  -l cse playbooks/cse-cgi.playbook.yml
+ansible-playbook --check --diff -l cse playbooks/cse-cgi.playbook.yml
 # Provision Wheatley System (you should not need to run this unless setting up an entirely new environment)
-ansible-playbook  -l wheatley playbooks/wheatley-sys.playbook.yml
+ansible-playbook --check --diff -l wheatley playbooks/wheatley-sys.playbook.yml
 # Provision Wheatley Apps
-ansible-playbook  -l wheatley playbooks/wheatley-apps.playbook.yml
+ansible-playbook --check --diff -l wheatley playbooks/wheatley-apps.playbook.yml
 ```
 
 The `wheatley-sys.playbook.yml` playbook will provision the system with the SSH `authorised_keys` defined in`ssh-access.playbook.yml`. This playbook can be individually run on other hosts to configure SSH access.

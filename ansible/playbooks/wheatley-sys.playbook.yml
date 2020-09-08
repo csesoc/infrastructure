@@ -14,15 +14,15 @@
     - name: Allow HTTP Access (80)
       ufw:
         rule: allow
-        port: 80
+        port: "80"
     - name: Allow HTTPS Access (443)
       ufw:
         rule: allow
-        port: 443
+        port: "443"
     - name: Allow Rancher Access (7654)
       ufw:
         rule: allow
-        port: 7654
+        port: "7654"
     - name: Enable UFW and Block All
       ufw:
         state: enabled
@@ -49,6 +49,15 @@
           port: ssh
           filter: sshd
           logpath: /var/log/auth.log
+
+- name: Configure fail2ban
+  hosts: all
+  tags: python
+  tasks:
+    - name: install pip3
+      package:
+        name: python3-pip
+        state: present
 
 - name: Install Docker
   hosts: all
