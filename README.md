@@ -6,7 +6,7 @@ This repo is used to provision CSESoc owned servers and accounts. It uses git se
 You'll need the following tools to do anything useful with this repo.
 
   - [Git Secret](http://git-secret.io/).
-  - [Ansible](http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+  - [Ansible](http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)\
 
 # Exec Handover
 
@@ -107,9 +107,9 @@ ansible-galaxy install -r requirements.yml
 ```bash
 # Provision all hosts SSH authorized_keys
 ansible-playbook  playbooks/ssh-access.playbook.yml
-# Provision CSE account
+# Provision CSE account (you should not need to run this unless setting up an entirely new environment)
 ansible-playbook  -l cse playbooks/cse-cgi.playbook.yml
-# Provision Wheatley System
+# Provision Wheatley System (you should not need to run this unless setting up an entirely new environment)
 ansible-playbook  -l wheatley playbooks/wheatley-sys.playbook.yml
 # Provision Wheatley Apps
 ansible-playbook  -l wheatley playbooks/wheatley-apps.playbook.yml
