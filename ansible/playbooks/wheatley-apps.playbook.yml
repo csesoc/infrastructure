@@ -71,6 +71,7 @@
         published_ports:
           - 7654:443
         restart_policy: unless-stopped
+        privileged: yes
         volumes:
           - /var/lib/rancher/etc/ssl/wheatley.cacerts.pem:/etc/rancher/ssl/cacerts.pem
           - /var/lib/rancher/etc/ssl/wheatley.fullchain.pem:/etc/rancher/ssl/cert.pem
